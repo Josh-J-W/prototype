@@ -1,0 +1,251 @@
+/* EtymoTree — styles.css */
+
+:root {
+  --ink: #1d1d1b;
+  --ink-soft: #6b6b66;
+  --ink-faint: #9a9a94;
+  --line: #d6d6d0;
+  --line-strong: #8c8c85;
+  --paper: #ffffff;
+  --panel: #fafaf8;
+  --accent: #2f5d50;          /* used only for the searched word and focus */
+  --warn: #8a5a12;
+  --error: #8c2f24;
+  --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Charter", Georgia, serif;
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrap { max-width: 980px; margin: 0 auto; padding: 32px 20px 96px; }
+
+/* ---------- header / search ---------- */
+
+header.masthead { margin-bottom: 28px; }
+
+.masthead h1 {
+  font-family: var(--serif);
+  font-size: 30px;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  margin: 0 0 4px;
+}
+
+.masthead p {
+  margin: 0;
+  color: var(--ink-soft);
+  max-width: 62ch;
+}
+
+.searchbar { display: flex; gap: 8px; margin: 20px 0 6px; max-width: 520px; }
+
+.searchbar input {
+  flex: 1;
+  font-family: var(--serif);
+  font-size: 18px;
+  padding: 9px 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: 6px;
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.searchbar input:focus-visible,
+button:focus-visible,
+.tab:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+button {
+  font: inherit;
+  padding: 9px 16px;
+  border: 1px solid var(--line-strong);
+  border-radius: 6px;
+  background: var(--paper);
+  color: var(--ink);
+  cursor: pointer;
+}
+
+button:hover { border-color: var(--ink); }
+button[disabled] { opacity: .5; cursor: default; }
+
+.hint { color: var(--ink-faint); font-size: 13px; }
+.hint button { padding: 0; border: 0; background: none; text-decoration: underline; cursor: pointer; }
+
+/* ---------- messages ---------- */
+
+.message {
+  border: 1px solid var(--line);
+  border-left-width: 3px;
+  border-radius: 4px;
+  padding: 12px 14px;
+  margin: 18px 0;
+  background: var(--panel);
+}
+.message.error { border-left-color: var(--error); }
+.message.warning { border-left-color: var(--warn); }
+.message h3 { margin: 0 0 4px; font-size: 15px; font-weight: 600; }
+.message p { margin: 0; color: var(--ink-soft); }
+.message .actions { margin-top: 10px; }
+
+/* ---------- etymology selector + tabs ---------- */
+
+.etymology-picker { display: flex; gap: 8px; align-items: center; margin: 24px 0 8px; flex-wrap: wrap; }
+.etymology-picker .label { font-size: 13px; color: var(--ink-soft); }
+
+.tabs { display: flex; gap: 2px; border-bottom: 1px solid var(--line); margin-top: 18px; }
+
+.tab {
+  font: inherit;
+  border: 0;
+  background: none;
+  padding: 8px 14px;
+  color: var(--ink-soft);
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  cursor: pointer;
+}
+.tab[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--ink); }
+.tab .count {
+  font-size: 11px;
+  color: var(--ink-faint);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0 5px;
+  margin-left: 6px;
+}
+
+.panel { padding-top: 22px; }
+.panel[hidden] { display: none; }
+
+/* ---------- tree ---------- */
+
+.tree { position: relative; padding: 8px 0 4px; overflow-x: auto; }
+.tree-wires { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.tree-rows { position: relative; display: flex; flex-direction: column; align-items: center; gap: 44px; }
+.tree-row { display: flex; justify-content: center; gap: 36px; flex-wrap: wrap; }
+
+.node {
+  position: relative;
+  min-width: 140px;
+  max-width: 230px;
+  padding: 9px 14px 11px;
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  background: var(--paper);
+  text-align: center;
+}
+
+.node[data-reconstructed="true"] { border-style: dashed; }
+.node[data-uncertain="true"] { border-color: var(--ink-faint); background: repeating-linear-gradient(135deg, #fff, #fff 7px, #fbfbf8 7px, #fbfbf8 14px); }
+.node[data-role="entry"] { border-width: 2px; border-color: var(--ink); }
+.node[data-role="component"] { border-radius: 14px; }
+
+.node-lang {
+  display: block;
+  font-size: 10px;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-bottom: 3px;
+}
+.node[data-language-known="false"] .node-lang::after { content: " ·  code not recognised"; text-transform: none; letter-spacing: 0; }
+
+.node-term { display: block; font-family: var(--serif); font-size: 20px; line-height: 1.25; }
+.node[data-uncertain="true"] .node-term { font-style: italic; }
+.node-term .qmark { color: var(--ink-faint); }
+
+.node-gloss { display: block; font-size: 12px; color: var(--ink-soft); margin-top: 3px; }
+
+.wire { stroke: var(--line-strong); stroke-width: 1; fill: none; }
+.wire[data-uncertain="true"] { stroke-dasharray: 3 4; }
+.wire-label { font-family: var(--sans); font-size: 10px; fill: var(--ink-faint); }
+
+.tree-legend { display: flex; gap: 18px; flex-wrap: wrap; margin-top: 34px; font-size: 12px; color: var(--ink-soft); }
+.tree-legend span::before {
+  content: "";
+  display: inline-block;
+  width: 16px; height: 9px;
+  margin-right: 6px;
+  vertical-align: 1px;
+  border: 1px solid var(--line-strong);
+  border-radius: 3px;
+}
+.tree-legend .l-recon::before { border-style: dashed; }
+.tree-legend .l-entry::before { border-width: 2px; border-color: var(--ink); }
+.tree-legend .l-uncertain::before { border-color: var(--ink-faint); background: repeating-linear-gradient(135deg, #fff, #fff 4px, #f0f0ea 4px, #f0f0ea 8px); }
+.tree-legend .l-component::before { border-radius: 9px; }
+
+/* ---------- aside: related terms ---------- */
+
+.related-block { margin-top: 40px; border-top: 1px solid var(--line); padding-top: 16px; }
+.related-block h3 { font-size: 13px; font-weight: 600; margin: 0 0 6px; }
+.related-block p { margin: 0 0 10px; color: var(--ink-soft); font-size: 13px; }
+.related-list { display: flex; flex-wrap: wrap; gap: 8px; }
+.related-item {
+  font-family: var(--serif);
+  font-size: 15px;
+  border: 1px dotted var(--line-strong);
+  border-radius: 20px;
+  padding: 3px 12px;
+  color: var(--ink-soft);
+}
+.related-item small { font-family: var(--sans); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-faint); margin-right: 6px; }
+
+/* ---------- data panels ---------- */
+
+.data-section { margin-bottom: 28px; }
+.data-section h3 { font-size: 13px; font-weight: 600; margin: 0 0 8px; }
+
+table.data { width: 100%; border-collapse: collapse; font-size: 13px; }
+table.data th, table.data td { text-align: left; padding: 6px 10px 6px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+table.data th { font-weight: 600; color: var(--ink-soft); font-size: 11px; text-transform: uppercase; letter-spacing: .06em; }
+table.data td.term { font-family: var(--serif); font-size: 15px; }
+table.data code { font-family: var(--mono); font-size: 12px; }
+
+pre.raw {
+  font-family: var(--mono);
+  font-size: 12px;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  word-break: break-word;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 14px;
+  max-height: 60vh;
+  overflow: auto;
+}
+
+.meta-line { font-size: 12px; color: var(--ink-soft); margin: 0 0 10px; }
+.meta-line code { font-family: var(--mono); word-break: break-all; }
+
+ul.notes { list-style: none; padding: 0; margin: 0; }
+ul.notes li { border-left: 2px solid var(--line); padding: 6px 0 6px 12px; margin-bottom: 8px; font-size: 13px; }
+ul.notes li[data-level="warning"] { border-left-color: var(--warn); }
+ul.notes li[data-level="error"] { border-left-color: var(--error); }
+ul.notes li code { display: block; font-family: var(--mono); font-size: 11px; color: var(--ink-soft); margin-top: 3px; word-break: break-all; }
+
+.empty { color: var(--ink-faint); font-size: 13px; }
+
+@media (max-width: 620px) {
+  .tree-row { gap: 20px; }
+  .node { min-width: 120px; padding: 8px 10px; }
+  .node-term { font-size: 17px; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .node { transition: border-color .15s ease; }
+}

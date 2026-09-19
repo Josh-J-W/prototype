@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EtymoTree</title>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="masthead">
+    <h1>EtymoTree</h1>
+    <p>Reads one Wiktionary page and draws what its etymology section actually says:
+      older forms above, the searched word at the bottom, and the pieces a word was
+      built from above the form they make.</p>
+
+    <form class="searchbar" id="search-form">
+      <input id="word" type="text" name="word" value="father"
+             autocomplete="off" spellcheck="false" aria-label="Word to look up">
+      <button id="search-button" type="submit">Look up</button>
+    </form>
+    <p class="hint">Try
+      <button type="button" data-example="father">father</button>,
+      <button type="button" data-example="orange">orange</button>,
+      <button type="button" data-example="toothbrush">toothbrush</button>,
+      <button type="button" data-example="bat">bat</button>.
+      One API request per search.</p>
+  </header>
+
+  <div id="messages"></div>
+
+  <main id="results" hidden>
+    <div id="etymology-picker" class="etymology-picker"></div>
+
+    <div class="tabs" id="tabs" role="tablist">
+      <button class="tab" role="tab" data-tab="tree" aria-selected="true">Tree</button>
+      <button class="tab" role="tab" data-tab="data" aria-selected="false">Parsed graph</button>
+      <button class="tab" role="tab" data-tab="raw" aria-selected="false">Raw wikitext</button>
+      <button class="tab" role="tab" data-tab="notes" aria-selected="false">Notes<span class="count" hidden>0</span></button>
+    </div>
+
+    <section class="panel" id="panel-tree" role="tabpanel"></section>
+    <section class="panel" id="panel-data" role="tabpanel" hidden></section>
+    <section class="panel" id="panel-raw" role="tabpanel" hidden></section>
+    <section class="panel" id="panel-notes" role="tabpanel" hidden></section>
+  </main>
+
+</div>
+
+<!-- Layer 0: shared -->
+<script src="js/languages.js"></script>
+<script src="js/wikitext.js"></script>
+<script src="js/sections.js"></script>
+<!-- Layer 2: parsing -->
+<script src="js/parser.js"></script>
+<script src="js/layout.js"></script>
+<!-- Layer 1: fetching -->
+<script src="js/api.js"></script>
+<!-- Layer 3: display -->
+<script src="js/render.js"></script>
+<script src="js/fallback.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
